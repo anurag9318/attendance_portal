@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Students | Attendance Portal</title><link rel="stylesheet" href="/css/style.css"></head><body>
+<div class="app"><aside class="side"><h2>✓ Attendance Portal</h2><nav class="nav"><a href="/admin/dashboard.html">Dashboard</a><a href="/admin/attendance.html">Today's Attendance</a><a href="/admin/students.html">Students</a><a href="/admin/reports.html">Reports</a><a href="#" onclick="logout(event)">Logout</a></nav></aside>
+<main class="main"><div class="top"><div><button id="menu" class="btn secondary menu">☰</button><h1>Students</h1></div><div class="user" id="user">Admin</div></div>
+<div class="card"><div class="head"><h2>Student Management</h2><button class="btn primary" onclick="openModal()">+ Add Student</button></div>
+<div class="filter"><label>Search<input id="search" placeholder="Name, ID, roll number"></label></div>
+<div class="table-wrap section"><table class="table"><thead><tr><th>ID</th><th>Name</th><th>Username</th><th>Class</th><th>Status</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+<div class="modal hidden" id="modal"><div class="modal-box"><button class="close" onclick="closeModal()">×</button><h2>Add Student</h2><form id="form" class="form-grid">
+<label>Student ID<input name="studentId" required></label><label>Name<input name="name" required></label><label>Email<input name="email" type="email"></label><label>Phone<input name="phone"></label><label>Roll Number<input name="rollNumber"></label><label>Class<input name="className" value="BCA"></label><label>Username<input name="username" required></label><label>Password<input name="password" type="password" required></label><button class="btn primary">Create</button></form></div></div>
+</main></div>
+<script src="/js/common.js"></script><script>menu();</script>
+<script>
+let all=[];async function load(){all=(await api("/api/students")).students;render()}function render(){const q=search.value.toLowerCase();rows.innerHTML=all.filter(s=>[s.name,s.student_id,s.roll_number,s.username].join(" ").toLowerCase().includes(q)).map(s=>`<tr><td>${esc(s.student_id)}</td><td>${esc(s.name)}</td><td>${esc(s.username)}</td><td>${esc(s.class_name)}</td><td>${s.status==="active"?'<span class="badge open">Active</span>':'<span class="badge closed">Inactive</span>'}</td><td>${s.status==="active"?`<button class="btn danger" onclick="deactivate(${s.id})">Deactivate</button>`:"-"}</td></tr>`).join("")}search.oninput=render;function openModal(){modal.classList.remove("hidden")}function closeModal(){modal.classList.add("hidden")}
+form.onsubmit=async e=>{e.preventDefault();try{await api("/api/students",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(form)))});toast("Student created.");form.reset();closeModal();load()}catch(x){toast(x.message,true)}};async function deactivate(id){if(!confirm("Deactivate this student?"))return;try{await api("/api/students/"+id,{method:"DELETE"});toast("Deactivated");load()}catch(e){toast(e.message,true)}}load();
+</script></body></html>

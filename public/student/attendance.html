@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Attendance | Attendance Portal</title><link rel="stylesheet" href="/css/style.css"></head><body><div class="app">
+<aside class="side"><h2>✓ Attendance Portal</h2><nav class="nav"><a href="/student/dashboard.html">My Dashboard</a><a href="/student/attendance.html">My Attendance</a><a href="#" onclick="logout(event)">Logout</a></nav></aside>
+<main class="main"><div class="top"><div><button id="menu" class="btn secondary menu">☰</button><h1>My Attendance</h1></div><div class="user" id="user">Student</div></div>
+<div class="card"><div class="head"><h2>My Attendance History</h2></div><div class="table-wrap"><table class="table"><thead><tr><th>Date</th><th>Day</th><th>Status</th><th>Marked At</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+</main></div><script src="/js/common.js"></script><script>menu();</script>
+<script>
+async function load(){const d=await api("/api/attendance/my-history");rows.innerHTML=d.history.map(r=>{const dt=new Date(r.attendance_date+"T00:00:00");return `<tr><td>${esc(r.attendance_date)}</td><td>${dt.toLocaleDateString("en-IN",{weekday:"long"})}</td><td>${badge(r.status)}</td><td>${esc(r.marked_at||"-")}</td></tr>`}).join("")||'<tr><td colspan="4">No attendance records yet.</td></tr>'}load();
+</script></body></html>
