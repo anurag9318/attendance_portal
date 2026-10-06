@@ -30,18 +30,11 @@ npm start
 Open `http://localhost:5000`.
 
 ## Demo credentials
-- Admin: `admin` / `Admin@123`
-- Student: `st001` / `Student@123`
+
 
 ## Automatic schedule
-Default `.env` values:
-```env
-PORT=5000
-JWT_SECRET=change_this_secret
-NODE_ENV=development
-ATTENDANCE_OPEN_TIME=08:00
-ATTENDANCE_CLOSE_TIME=11:40
-AUTO_FINALIZE=true
+
+
 ```
 Times use **Asia/Kolkata (IST)**. On weekdays, the portal automatically opens at 08:00 and closes at 11:40. If `AUTO_FINALIZE=true`, it also finalizes at 11:40. Admin can manually override the automatic state using Open, Close, Reopen, or Finalize.
 
